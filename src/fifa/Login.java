@@ -18,6 +18,8 @@ import javax.swing.border.LineBorder;
 
 import org.w3c.dom.events.Event;
 
+import menu.Menu_principal;
+
 import javax.swing.JTextArea;
 import javax.swing.border.BevelBorder;
 import javax.swing.JProgressBar;
