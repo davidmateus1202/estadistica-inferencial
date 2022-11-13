@@ -17,14 +17,33 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import escritura.TextPrompt;
+import mvc.modelo_usuario;
+
 public class Marketing extends JFrame {
 
 	private JPanel contentPane;
 	public JTextField NombreJ;
 	public JTextField media;
 	public JLabel foto;
-	public JLabel buscar;
+	public JLabel boton;
+	public JLabel dinero3;
+	private modelo_usuario mod2;
 	public Marketing() {
+		component();
+	
+		
+		
+	}	
+	public Marketing(modelo_usuario mod2) {
+		component();
+		TextPrompt usu = new TextPrompt("Nombre de jugador",NombreJ);
+		TextPrompt con = new TextPrompt("GRL jugador", media);
+		this.mod2 = mod2;
+		dinero3.setText(String.valueOf(mod2.getPresupuesto()));
+	}
+	
+	public void component() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 938, 800);
@@ -35,6 +54,7 @@ public class Marketing extends JFrame {
 		contentPane.setLayout(null);
 		
 		foto= new JLabel("");
+		foto.setHorizontalAlignment(SwingConstants.CENTER);
 		foto.setBounds(306, 210, 303, 364);
 		contentPane.add(foto);
 		
@@ -81,14 +101,14 @@ public class Marketing extends JFrame {
 		separator_2.setBounds(10, 40, 217, 12);
 		panel_3.add(separator_2);
 		
-		JLabel dinero3 = new JLabel("9.999.999");
+		dinero3 = new JLabel("");
 		dinero3.setForeground(new Color(255, 255, 255));
 		dinero3.setFont(new Font("Agency FB", Font.BOLD, 25));
 		dinero3.setHorizontalAlignment(SwingConstants.RIGHT);
 		dinero3.setBounds(115, 10, 112, 32);
 		panel_3.add(dinero3);
 		
-		JLabel lblNewLabel_2 = new JLabel("");
+		JLabel lblNewLabel_2 = new JLabel();
 		lblNewLabel_2.setIcon(new ImageIcon(Marketing.class.getResource("/imagenes/image (3) (3).png")));
 		lblNewLabel_2.setBounds(51, 0, 54, 42);
 		panel_3.add(lblNewLabel_2);
@@ -119,16 +139,15 @@ public class Marketing extends JFrame {
 		contentPane.add(buscarjugador);
 		buscarjugador.setLayout(null);
 		
-		JLabel lblNewLabel_3 = new JLabel("New label");
-		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_3.setIcon(new ImageIcon(Marketing.class.getResource("/imagenes/backgrounds_21_B3.png")));
-		lblNewLabel_3.setBounds(10, 45, 238, 301);
-		buscarjugador.add(lblNewLabel_3);
+		boton = new JLabel("New label");
+		boton.setHorizontalAlignment(SwingConstants.CENTER);
+		boton.setIcon(new ImageIcon(Marketing.class.getResource("/imagenes/backgrounds_21_B3.png")));
+		boton.setBounds(10, 45, 238, 301);
+		buscarjugador.add(boton);
 		
 		NombreJ = new JTextField();
 		NombreJ.setForeground(Color.LIGHT_GRAY);
 		NombreJ.setFont(new Font("Agency FB", Font.BOLD, 15));
-		NombreJ.setText("Nombre de jugador");
 		NombreJ.setBorder(null);
 		NombreJ.setBackground(new Color(0, 0, 102));
 		NombreJ.setBounds(20, 356, 228, 26);
@@ -142,7 +161,6 @@ public class Marketing extends JFrame {
 		media = new JTextField();
 		media.setForeground(Color.LIGHT_GRAY);
 		media.setFont(new Font("Agency FB", Font.BOLD, 15));
-		media.setText("GRL jugador");
 		media.setBackground(new Color(0, 0, 102));
 		media.setBorder(null);
 		media.setBounds(20, 413, 228, 26);
@@ -153,14 +171,10 @@ public class Marketing extends JFrame {
 		separator_3_1.setBounds(20, 449, 228, 19);
 		buscarjugador.add(separator_3_1);
 		
-		buscar = new JLabel("Buscar");
-		buscar.setFont(new Font("Tahoma", Font.PLAIN, 43));
-		buscar.setBounds(42, 479, 136, 45);
-		buscarjugador.add(buscar);
-		
 		JLabel lblNewLabel_4 = new JLabel("New label");
 		lblNewLabel_4.setIcon(new ImageIcon(Marketing.class.getResource("/imagenes/pngwing.com.png")));
 		lblNewLabel_4.setBounds(10, 10, 918, 751);
 		contentPane.add(lblNewLabel_4);
+	
 	}
 }

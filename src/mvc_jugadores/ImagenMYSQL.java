@@ -22,7 +22,7 @@ public void paint(Graphics g) {
 	//ImageIcon img = new ImageIcon(getClass().getResource(ruta));
 	BufferedImage imgen = ruta;
 	Image img = new ImageIcon(ruta).getImage();
-	g.drawImage(img, 0,0, heigth.width, heigth.height,null);
+	g.drawImage(img, 0,0, heigth.width-50, heigth.height-10,null);
 	g.clearRect(700,700,700,700 );
 	g.getClipBounds();
 	setOpaque(false);

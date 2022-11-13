@@ -9,6 +9,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.border.SoftBevelBorder;
+
+import mvc.modelo_usuario;
+
 import javax.swing.border.BevelBorder;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;

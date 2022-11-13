@@ -195,6 +195,7 @@ public class Bundesliga extends JFrame {
 		panel_1.add(txtcontador);
 		
 		JLabel jugador = new JLabel("");
+		jugador.setIcon(new ImageIcon(Bundesliga.class.getResource("/imagenes/real_ligas (1).png")));
 		jugador.setBounds(10, 132, 183, 293);
 		panel_desliza.add(jugador);
 		

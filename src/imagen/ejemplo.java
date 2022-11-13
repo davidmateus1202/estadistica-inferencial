@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import java.awt.FlowLayout;
 
 public class ejemplo extends JFrame {
 
@@ -40,10 +41,11 @@ public class ejemplo extends JFrame {
 	private JTextField goles;
 	private JTextField posicion;
 	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_4;
+	private JLabel lblNewLabel_5;
+	private JTextField precio;
 
 	/**
 	 * Launch the application.
@@ -70,14 +72,16 @@ public class ejemplo extends JFrame {
 	}
 	public void components() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 442, 437);
+		setBounds(100, 100, 599, 437);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		{
 			imagen = new JPanel();
-			imagen.setBounds(10, 11, 414, 205);
+			FlowLayout flowLayout = (FlowLayout) imagen.getLayout();
+			flowLayout.setAlignment(FlowLayout.LEADING);
+			imagen.setBounds(10, 11, 463, 205);
 			contentPane.add(imagen);
 		}
 		{
@@ -101,12 +105,12 @@ public class ejemplo extends JFrame {
 							FileInputStream fis = new FileInputStream(fichero);
 							Connection con1 = con.getConnection();
 							try {
-								ps = con1.prepareStatement("INSERT INTO jugadores(id,nombres,media,posicion,goles,fotos) VALUES(?,?,?,?,?,?)");
-								ps.setInt(1,Integer.parseInt(id.getText()) );
-								ps.setString(2, nombre.getText());
-								ps.setInt(3, Integer.parseInt(media.getText()));
-								ps.setString(4, posicion.getText());
-								ps.setInt(5, Integer.parseInt(goles.getText()));
+								ps = con1.prepareStatement("INSERT INTO jugadores(nombres,media,posicion,goles,valor,fotos) VALUES(?,?,?,?,?,?)");
+								ps.setString(1, nombre.getText());
+								ps.setInt(2, Integer.parseInt(media.getText()));
+								ps.setString(3, posicion.getText());
+								ps.setInt(4, Integer.parseInt(goles.getText()));
+								ps.setInt(5, Integer.parseInt(precio.getText()));
 								ps.setBinaryStream(6, fis,(int) fichero.length());
 								ps.execute();
 								JOptionPane.showMessageDialog(null, "guardado");
@@ -121,12 +125,12 @@ public class ejemplo extends JFrame {
 						}
 						
 					}
-					/*	int x = imagen.getWidth();
-					int y = imagen.getHeight();
+					/*	int x = image.getWidth();
+					int y = image.getHeight();
 
-					imagen img = new imagen( x, y,ruta);
-					imagen.add(img);
-					imagen.repaint();*/
+					image img = new image( x, y,ruta);
+					image.add(img);
+					image.repaint();*/
 				}
 			});
 			cargar.setBounds(10, 344, 89, 23);
@@ -153,6 +157,7 @@ public class ejemplo extends JFrame {
 		{
 			id = new JTextField();
 			id.setBounds(109, 265, 22, 20);
+			id.setVisible(false);
 			contentPane.add(id);
 			id.setColumns(10);
 		}
@@ -180,11 +185,6 @@ public class ejemplo extends JFrame {
 			contentPane.add(lblNewLabel);
 		}
 		{
-			lblNewLabel_1 = new JLabel("id");
-			lblNewLabel_1.setBounds(109, 240, 22, 14);
-			contentPane.add(lblNewLabel_1);
-		}
-		{
 			lblNewLabel_2 = new JLabel("media");
 			lblNewLabel_2.setBounds(155, 240, 46, 14);
 			contentPane.add(lblNewLabel_2);
@@ -198,6 +198,17 @@ public class ejemplo extends JFrame {
 			lblNewLabel_4 = new JLabel("posicion");
 			lblNewLabel_4.setBounds(283, 240, 46, 14);
 			contentPane.add(lblNewLabel_4);
+		}
+		{
+			lblNewLabel_5 = new JLabel("precio");
+			lblNewLabel_5.setBounds(251, 321, 46, 14);
+			contentPane.add(lblNewLabel_5);
+		}
+		{
+			precio = new JTextField();
+			precio.setBounds(243, 345, 86, 20);
+			contentPane.add(precio);
+			precio.setColumns(10);
 		}
 	}
 }

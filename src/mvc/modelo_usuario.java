@@ -4,7 +4,13 @@ public class modelo_usuario {
 	int id;
 	String nombre;
 	String password;
-	
+	int presupuesto;
+	public int getPresupuesto() {
+		return presupuesto;
+	}
+	public void setPresupuesto(int presupuesto) {
+		this.presupuesto = presupuesto;
+	}
 	public int getId() {
 		return id;
 	}

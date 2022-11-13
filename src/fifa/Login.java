@@ -18,7 +18,16 @@ import javax.swing.border.LineBorder;
 
 import org.w3c.dom.events.Event;
 
+import escritura.TextPrompt;
+import has_jugadores_equipos.modelo;
+import menu.Marketing;
 import menu.Menu_principal;
+import menu.Tienda;
+import mvc.consultas;
+import mvc.modelo_usuario;
+import mvc_jugadores.consulta;
+import mvc_jugadores.controlador;
+import mvc_jugadores.jugador_modelo;
 
 import javax.swing.JTextArea;
 import javax.swing.border.BevelBorder;
@@ -38,23 +47,31 @@ public class Login extends JFrame {
 
 	
 
-	private JPanel contentPane;
-	private JLabel lblNewLabel_1;
-	private JTextField txtuser;
-	private JTextField txtcont;
-	private JLabel lblNewLabel_3;
-	private JPanel btnin;
-	private JLabel btniniciar;
-	private JPanel barra;
-	private JLabel btncerrar;
-	private JLabel lblNewLabel_4;
-	private JLabel lblNewLabel_5;
-
+	public JPanel contentPane;
+	public JLabel lblNewLabel_1;
+	public JTextField use;
+	public JTextField pasword;
+	public JLabel lblNewLabel_3;
+	public JPanel btnin;
+	public JLabel btniniciar;
+	public JPanel barra;
+	public JLabel btncerrar;
+	public JLabel lblNewLabel_4;
+	public JLabel lblNewLabel_5;
+	modelo_usuario mod;
 
 	public Login() {
-		
-		
-		
+		component();
+		TextPrompt usu = new TextPrompt("Ingrese su nombre de usuario",use) ;
+		usu.setForeground(Color.LIGHT_GRAY);
+		usu.setFont(new Font("Agency FB", Font.BOLD, 15));
+		TextPrompt con = new TextPrompt("Digite su contraseña", pasword);
+	
+		con.setForeground(Color.LIGHT_GRAY);
+		con.setFont(new Font("Agency FB", Font.BOLD, 15));
+	}
+	public void component() {
+
 		setLocationByPlatform(true);
 		setUndecorated(true);
 		setResizable(false);
@@ -77,64 +94,23 @@ public class Login extends JFrame {
 		lblNewLabel_1.setBounds(541, 0, 345, 602);
 		bg.add(lblNewLabel_1);
 		
-		txtuser = new JTextField();
-		txtuser.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				if(txtuser.getText().equalsIgnoreCase("Ingrese su nombre de usuario")) {
-				txtuser.setText("");
-				txtuser.setForeground(Color.BLACK);
-				
-			}
-
-				
-			}
-			public void mouseExited(MouseEvent e) {
-				if(txtuser.getText().equals("")) {
-					txtuser.setText("Ingrese su nombre de usuario");
-					txtuser.setForeground(Color.LIGHT_GRAY);
-				}
-				
-				
-			}
-		});
-		txtuser.setBorder(null);
-		txtuser.setFont(new Font("Roboto Mono Medium", Font.PLAIN, 13));
-		txtuser.setForeground(Color.LIGHT_GRAY);
-		txtuser.setText("Ingrese su nombre de usuario");
-		txtuser.setBounds(68, 309, 255, 33);
-		bg.add(txtuser);
-		txtuser.setColumns(10);
+		use = new JTextField();
+	
+	
+		use.setBorder(null);
+		use.setFont(new Font("Roboto Mono Medium", Font.PLAIN, 13));
+		use.setForeground(Color.LIGHT_GRAY);
+		use.setBounds(68, 309, 255, 33);
+		bg.add(use);
+		use.setColumns(10);
 		
-		txtcont = new JTextField();
-		txtcont.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				if(txtcont.getText().equalsIgnoreCase("Ingrese su contraseña")) {
-					txtcont.setText("");
-					txtcont.setForeground(Color.BLACK);
-			
-				
-			}
-		}
-		
-			@Override
-			public void mouseExited(MouseEvent e) {
-				if(txtcont.getText().equals("")) {
-					txtcont.setText("Ingrese su contraseña");
-					txtcont.setForeground(Color.LIGHT_GRAY);
-					
-				}
-				
-			}
-		});
-		txtcont.setText("Ingrese su contraseña");
-		txtcont.setForeground(Color.LIGHT_GRAY);
-		txtcont.setFont(new Font("Roboto Mono Medium", Font.PLAIN, 13));
-		txtcont.setColumns(10);
-		txtcont.setBorder(null);
-		txtcont.setBounds(68, 456, 255, 33);
-		bg.add(txtcont);
+		pasword = new JTextField();
+		pasword.setForeground(Color.LIGHT_GRAY);
+		pasword.setFont(new Font("Roboto Mono Medium", Font.PLAIN, 13));
+		pasword.setColumns(10);
+		pasword.setBorder(null);
+		pasword.setBounds(68, 456, 255, 33);
+		bg.add(pasword);
 		
 		lblNewLabel_3 = new JLabel("INICIAR SESION ");
 		lblNewLabel_3.setForeground(Color.GRAY);
@@ -151,27 +127,34 @@ public class Login extends JFrame {
 		btniniciar = new JLabel("INICIAR");
 		btniniciar.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		btniniciar.addMouseListener(new MouseAdapter() {
+			private modelo_usuario mod;
+		
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnin.setBackground(Color.WHITE);
-				btniniciar.setForeground(Color.BLACK);
+			public void mousePressed(MouseEvent e) {
+
+				modelo_usuario mod = new modelo_usuario();
+				consultas modC = new consultas();
 				
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnin.setBackground(Color.BLACK);
-				btniniciar.setForeground(Color.WHITE);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				iniciarseccion();
-				
+				if(!use.getText().equals("")&&!pasword.equals("")) {
+					mod.setNombre(use.getText());
+					mod.setPassword(pasword.getText());
+					if(modC.login(mod)) {
+						this.mod = mod;
+						iniciarseccion(mod);
+					
+					}else {
+						JOptionPane.showMessageDialog(null, "Datos incorrectos");
+					}
+					}else {
+						JOptionPane.showMessageDialog(null, "Debe ingresar datos");
+					}
+		
 			}
 		});
 		btniniciar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btniniciar.setForeground(new Color(255, 255, 255));
 		btniniciar.setHorizontalAlignment(SwingConstants.CENTER);
-		btniniciar.setFont(new Font("Roboto Mono Medium", Font.PLAIN, 15));
+		btniniciar.setFont(new Font("Agency FB", Font.BOLD, 15));
 		btniniciar.setBounds(0, 0, 255, 39);
 		btnin.add(btniniciar);
 		
@@ -207,12 +190,12 @@ public class Login extends JFrame {
 		barra.add(btncerrar);
 		
 		lblNewLabel_4 = new JLabel("Usuario");
-		lblNewLabel_4.setFont(new Font("Roboto Mono Medium", Font.BOLD, 20));
+		lblNewLabel_4.setFont(new Font("Agency FB", Font.BOLD, 25));
 		lblNewLabel_4.setBounds(68, 255, 255, 44);
 		bg.add(lblNewLabel_4);
 		
 		lblNewLabel_5 = new JLabel("Conntraseña");
-		lblNewLabel_5.setFont(new Font("Roboto Mono Medium", Font.BOLD, 20));
+		lblNewLabel_5.setFont(new Font("Agency FB", Font.BOLD, 25));
 		lblNewLabel_5.setBounds(68, 402, 255, 44);
 		bg.add(lblNewLabel_5);
 		
@@ -225,21 +208,17 @@ public class Login extends JFrame {
 		bg.add(separator_1);
 	}
 	
-	public void iniciarseccion() {
-		
-		  int contraseña;
-		this.user= Integer.parseInt(txtuser.getText());
-		this.contra = Integer.parseInt(txtcont.getText());
-		
-		if(user==12345 && contra== 1234) {
-			this.setVisible(false);
-			Menu_principal abrirventana=new Menu_principal();
-			abrirventana.setVisible(true);
-		}else {
-			JOptionPane.showMessageDialog(null, "Error al ingresar los datos");
-			txtuser.setText("Ingrese su nombre de usuario");
-			txtcont.setText("Ingrese su contraseña");
-		}
+	public void iniciarseccion(modelo_usuario mod) {
+		this.mod=mod;
+		this.setVisible(false);
+		Menu_principal abrirventana=new Menu_principal(mod);
+		abrirventana.setVisible(true);
+		Tienda tienda = new Tienda();
+		Marketing mercado = new Marketing(mod);
+		modelo modH= new modelo();
+		consulta modC = new consulta();
+		jugador_modelo mod2 = new jugador_modelo();
+		controlador ctr = new controlador(mod2,modC,mercado,mod, modH);
 		
 	}
-}
+	}

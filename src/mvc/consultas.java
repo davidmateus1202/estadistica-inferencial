@@ -53,7 +53,7 @@ public class consultas extends coneccion {
 		ResultSet rs = null;
 		Connection con = getConnection();
 		
-		String sql = "SELECT id,usuario,password FROM usuarios WHERE usuario=?";
+		String sql = "SELECT id,usuario,password,presupuesto FROM usuarios WHERE usuario=?";
 
 		try {
 			ps = con.prepareStatement(sql);
@@ -64,6 +64,7 @@ public class consultas extends coneccion {
 			if(rs.next()) {
 				if(usr.getPassword().equals(rs.getString(3))) {
 					usr.setId(rs.getInt(1));
+					usr.setPresupuesto(rs.getInt(4));
 					return true;
 				}
 				else {

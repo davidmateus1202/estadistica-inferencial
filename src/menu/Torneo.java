@@ -7,11 +7,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JSeparator;
@@ -22,13 +27,142 @@ import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
+
+import mvc.modelo_usuario;
+
 import javax.swing.border.BevelBorder;
 import java.awt.Cursor;
 import javax.swing.border.LineBorder;
+import java.awt.Dimension;
+import java.awt.Component;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.TitledBorder;
 
 public class Torneo extends JFrame {
 
 	private JPanel contentPane;
+	private boolean estado=true;
+	JLabel marcajugador = new JLabel("");
+	JLabel marcarival = new JLabel("");
+	JLabel semi1 = new JLabel("S E M I   F I N A L");
+	JLabel semi2 = new JLabel("S E M I   F I N A L");
+	JLabel semi3 = new JLabel("S E M I   F I N A L");
+	JLabel semi4 = new JLabel("S E M I   F I N A L");
+	JLabel final1 = new JLabel("F I N A L");
+	JLabel final2 = new JLabel("F I N A L");
+	
+	
+	
+	static double numEntero;
+	static double numEntero2;
+	
+	//probabilidad por equipo
+	
+	private double resultado1;
+	private double resultado2;
+	private double resultado3;
+	private  double resultado4;
+	private double resultado5;
+	private  double resultado6;
+	private  double resultado7;
+	private  double resultado8;
+	public double resultado_semi;
+	public double resultado_semi3;
+	public double resultado_semi4;
+	public double resultado_semi5;
+	public double resultado_semi6;
+	
+	
+	
+	static double jugador=0.35;
+	static double barcelona=0.30;
+	static double real_madrid=0.45;
+	static double mancherter_city=0.40;
+	static double paris=0.38;
+	static double bayer=0.35;
+	static double chelsea=0.40;
+	static double liverpool=0.50;
+	private boolean victoria=true;
+	
+	//funcion de probabilidad
+	public static int Bernoulli(double p) {
+		double ri=Math.random();
+		if(ri<=p) {
+			return(1);
+		}else {
+			return(0);
+		}		
+	}
+	public static int Binomial(double p, int ensayos) {
+		int exitos=0;
+		for(int i=0; i<ensayos; i++) {
+			if(Bernoulli(p)==1) {
+				exitos++;
+			}
+		}
+		return(exitos);
+	}
+	public static int Bernoulli12(double p) {
+		double ri=Math.random();
+		if(ri<=p) {
+			return(1);
+		}else {
+			return(0);
+		}		
+	}
+	public static int Binomial12(double p, int ensayos) {
+		int exitos=0;
+		for(int i=0; i<ensayos; i++) {
+			if(Bernoulli(p)==1) {
+				exitos++;
+			}
+		}
+		return(exitos);
+	}
+	
+	//funcion de deslizamiento
+	public void Izq(JComponent componente, int milisegundo, int saltos, int parar ) {
+		(new Thread() {
+			@Override
+			public void run() {
+				for(int i = componente.getWidth(); i>= parar; i-= saltos) {
+					try {
+						Thread.sleep(milisegundo);
+						componente.setPreferredSize(new Dimension(i, componente.getHeight()));
+						SwingUtilities.updateComponentTreeUI(componente);
+						
+					}catch(InterruptedException e) {
+						System.out.println("Error thread Interrumpido" + e);
+					}
+				}
+				
+			}
+		}).start();
+			
+		
+		
+	}
+	public void Der(JComponent componente, int milisegundo, int saltos, int parar ) {
+		(new Thread() {
+			@Override
+			public void run() {
+				for(int i = componente.getWidth(); i<= parar; i+= saltos) {
+					try {
+						Thread.sleep(milisegundo);
+						componente.setPreferredSize(new Dimension(i, componente.getHeight()));
+						SwingUtilities.updateComponentTreeUI(componente);
+						
+					}catch(InterruptedException e) {
+						System.out.println("Error thread Interrumpido" + e);
+					}
+				}
+				
+			}
+		}).start();
+			
+		
+		
+	}
 
 
 	public Torneo() {
@@ -41,481 +175,498 @@ public class Torneo extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/champions (1).png")));
-		lblNewLabel.setBounds(10, 10, 918, 202);
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lblNewLabel);
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 938, 800);
+		contentPane.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
 		
-		JPanel jugadorp = new JPanel();
-		jugadorp.setBounds(10, 231, 81, 45);
-		contentPane.add(jugadorp);
-		jugadorp.setLayout(null);
+		JPanel panel_desliza = new JPanel();
+		panel_desliza.setBackground(Color.WHITE);
+		panel_desliza.setPreferredSize(new Dimension(0, 10));
+		panel.add(panel_desliza, BorderLayout.WEST);
+		panel_desliza.setLayout(null);
 		
-		JLabel jugador = new JLabel("jugador");
-		jugador.setBounds(0, 0, 81, 45);
-		jugadorp.add(jugador);
+		JPanel panel_10 = new JPanel();
+		panel_10.setBackground(Color.BLACK);
+		panel_10.setBounds(10, 717, 187, 32);
+		panel_desliza.add(panel_10);
+		panel_10.setLayout(null);
 		
-		JPanel barcelonap = new JPanel();
-		barcelonap.setBounds(10, 286, 81, 45);
-		barcelonap.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		barcelonap.setBackground(new Color(0, 0, 153));
-		contentPane.add(barcelonap);
-		barcelonap.setLayout(null);
-		
-		JLabel barcelona = new JLabel("");
-		barcelona.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/barcelona.png")));
-		barcelona.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		barcelona.setHorizontalAlignment(SwingConstants.CENTER);
-		barcelona.setBounds(0, 0, 81, 45);
-		barcelonap.add(barcelona);
-		
-		JPanel real = new JPanel();
-		real.setBounds(10, 362, 81, 45);
-		contentPane.add(real);
-		real.setLayout(null);
-		
-		JLabel real_madrid = new JLabel("");
-		real_madrid.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/real_madrid.png")));
-		real_madrid.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		real_madrid.setHorizontalAlignment(SwingConstants.CENTER);
-		real_madrid.setBounds(0, 0, 81, 45);
-		real.add(real_madrid);
-		
-		JPanel liverpoolp = new JPanel();
-		liverpoolp.setBounds(10, 417, 81, 45);
-		liverpoolp.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		liverpoolp.setBackground(new Color(0, 153, 153));
-		contentPane.add(liverpoolp);
-		liverpoolp.setLayout(null);
-		
-		JLabel liverpool = new JLabel("");
-		liverpool.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/liverpool.png")));
-		liverpool.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		liverpool.setHorizontalAlignment(SwingConstants.CENTER);
-		liverpool.setBounds(0, 0, 81, 45);
-		liverpoolp.add(liverpool);
-		
-		JPanel arsenalp = new JPanel();
-		arsenalp.setBounds(10, 503, 81, 45);
-		arsenalp.setBackground(new Color(255, 0, 0));
-		arsenalp.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		contentPane.add(arsenalp);
-		arsenalp.setLayout(null);
-		
-		JLabel arsenal = new JLabel("");
-		arsenal.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/arsenal (1).png")));
-		arsenal.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		arsenal.setHorizontalAlignment(SwingConstants.CENTER);
-		arsenal.setBounds(0, 0, 81, 45);
-		arsenalp.add(arsenal);
-		
-		JPanel dortmundp = new JPanel();
-		dortmundp.setBounds(10, 558, 81, 45);
-		dortmundp.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		dortmundp.setBackground(new Color(255, 255, 0));
-		contentPane.add(dortmundp);
-		dortmundp.setLayout(null);
-		
-		JLabel dortmund = new JLabel("");
-		dortmund.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/dortmund (1).png")));
-		dortmund.setHorizontalAlignment(SwingConstants.CENTER);
-		dortmund.setBounds(0, 0, 81, 45);
-		dortmundp.add(dortmund);
-		
-		JPanel juventosp = new JPanel();
-		juventosp.setBackground(Color.WHITE);
-		juventosp.setBounds(10, 644, 81, 45);
-		contentPane.add(juventosp);
-		juventosp.setLayout(null);
-		
-		JLabel juventos = new JLabel("");
-		juventos.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/WhatsApp Image 2022-10-09 at 4.44.13 PM.jpeg")));
-		juventos.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		juventos.setHorizontalAlignment(SwingConstants.CENTER);
-		juventos.setBounds(0, 0, 81, 45);
-		juventosp.add(juventos);
-		
-		JPanel cityp = new JPanel();
-		cityp.setBounds(10, 699, 81, 45);
-		cityp.setBackground(new Color(0, 191, 255));
-		contentPane.add(cityp);
-		cityp.setLayout(null);
-		
-		JLabel city = new JLabel("");
-		city.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/manchestercity.png")));
-		city.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		city.setHorizontalAlignment(SwingConstants.CENTER);
-		city.setBounds(0, 0, 81, 45);
-		cityp.add(city);
-		
-		JPanel tottenp = new JPanel();
-		tottenp.setBounds(847, 231, 81, 45);
-		tottenp.setBackground(new Color(0, 0, 0));
-		contentPane.add(tottenp);
-		tottenp.setLayout(null);
-		
-		JLabel totten = new JLabel("");
-		totten.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/totten2.png")));
-		totten.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		totten.setHorizontalAlignment(SwingConstants.CENTER);
-		totten.setBounds(0, 0, 81, 45);
-		tottenp.add(totten);
-		
-		JPanel unitedp = new JPanel();
-		unitedp.setBounds(847, 286, 81, 45);
-		unitedp.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		unitedp.setBackground(new Color(255, 0, 0));
-		contentPane.add(unitedp);
-		unitedp.setLayout(null);
-		
-		JLabel united = new JLabel("");
-		united.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/unated.png")));
-		united.setHorizontalAlignment(SwingConstants.CENTER);
-		united.setBounds(0, 0, 81, 45);
-		unitedp.add(united);
-		
-		JPanel salkap = new JPanel();
-		salkap.setBounds(847, 362, 81, 45);
-		salkap.setBackground(new Color(0, 0, 139));
-		contentPane.add(salkap);
-		salkap.setLayout(null);
-		
-		JLabel salka = new JLabel("");
-		salka.setBorder(new LineBorder(new Color(0, 0, 0)));
-		salka.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/salka.png")));
-		salka.setHorizontalAlignment(SwingConstants.CENTER);
-		salka.setBounds(0, 0, 81, 45);
-		salkap.add(salka);
-		
-		JPanel portop = new JPanel();
-		portop.setBounds(847, 417, 81, 45);
-		portop.setBackground(new Color(65, 105, 225));
-		contentPane.add(portop);
-		portop.setLayout(null);
-		
-		JLabel porto = new JLabel("");
-		porto.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/porto.png")));
-		porto.setHorizontalAlignment(SwingConstants.CENTER);
-		porto.setBounds(0, 0, 81, 45);
-		portop.add(porto);
-		
-		JPanel romap = new JPanel();
-		romap.setBounds(847, 503, 81, 45);
-		romap.setBackground(new Color(255, 204, 0));
-		contentPane.add(romap);
-		romap.setLayout(null);
-		
-		JLabel roma = new JLabel("");
-		roma.setBorder(new LineBorder(new Color(0, 0, 0)));
-		roma.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/roma.png")));
-		roma.setHorizontalAlignment(SwingConstants.CENTER);
-		roma.setBounds(0, 0, 81, 45);
-		romap.add(roma);
-		
-		JPanel bayerp = new JPanel();
-		bayerp.setBounds(847, 558, 81, 45);
-		bayerp.setBackground(new Color(51, 102, 255));
-		contentPane.add(bayerp);
-		bayerp.setLayout(null);
-		
-		JLabel bayer = new JLabel("");
-		bayer.setBorder(new LineBorder(new Color(0, 0, 0)));
-		bayer.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/bayer.png")));
-		bayer.setHorizontalAlignment(SwingConstants.CENTER);
-		bayer.setBounds(0, 0, 81, 45);
-		bayerp.add(bayer);
-		
-		JPanel parisp = new JPanel();
-		parisp.setBounds(847, 644, 81, 45);
-		parisp.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		parisp.setBackground(new Color(255, 255, 255));
-		contentPane.add(parisp);
-		parisp.setLayout(null);
-		
-		JLabel paris = new JLabel("");
-		paris.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/paris.png")));
-		paris.setHorizontalAlignment(SwingConstants.CENTER);
-		paris.setBounds(0, 0, 81, 45);
-		parisp.add(paris);
-		
-		JPanel ajaxp = new JPanel();
-		ajaxp.setBounds(847, 699, 81, 45);
-		ajaxp.setBackground(new Color(255, 102, 102));
-		contentPane.add(ajaxp);
-		ajaxp.setLayout(null);
-		
-		JLabel ajax = new JLabel("");
-		ajax.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/ajax.png")));
-		ajax.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		ajax.setHorizontalAlignment(SwingConstants.CENTER);
-		ajax.setBounds(0, 0, 81, 45);
-		ajaxp.add(ajax);
-		
-		JPanel real4 = new JPanel();
-		real4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		real4.setBackground(Color.WHITE);
-		real4.setBounds(101, 379, 81, 45);
-		contentPane.add(real4);
-		real4.setLayout(null);
-		
-		JPanel dormu4 = new JPanel();
-		dormu4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		dormu4.setBackground(Color.WHITE);
-		dormu4.setBounds(101, 558, 81, 45);
-		contentPane.add(dormu4);
-		dormu4.setLayout(null);
-		
-		JPanel juve4 = new JPanel();
-		juve4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		juve4.setBackground(Color.WHITE);
-		juve4.setBounds(101, 611, 81, 45);
-		contentPane.add(juve4);
-		juve4.setLayout(null);
-		
-		JPanel jugador4 = new JPanel();
-		jugador4.setBackground(Color.WHITE);
-		jugador4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		jugador4.setBounds(101, 324, 81, 45);
-		contentPane.add(jugador4);
-		jugador4.setLayout(null);
-		
-		JPanel jugadorsemi = new JPanel();
-		jugadorsemi.setBorder(new LineBorder(new Color(0, 0, 0)));
-		jugadorsemi.setBackground(Color.WHITE);
-		jugadorsemi.setBounds(192, 417, 81, 45);
-		contentPane.add(jugadorsemi);
-		jugadorsemi.setLayout(null);
-		
-		JPanel juvesemis = new JPanel();
-		juvesemis.setBorder(new LineBorder(new Color(0, 0, 0)));
-		juvesemis.setBackground(Color.WHITE);
-		juvesemis.setBounds(192, 503, 81, 45);
-		contentPane.add(juvesemis);
-		juvesemis.setLayout(null);
-		
-		JPanel panel_9_3 = new JPanel();
-		panel_9_3.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_9_3.setBackground(Color.WHITE);
-		panel_9_3.setBounds(283, 460, 81, 45);
-		contentPane.add(panel_9_3);
-		panel_9_3.setLayout(null);
-		
-		JPanel united4 = new JPanel();
-		united4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		united4.setBackground(Color.WHITE);
-		united4.setBounds(756, 324, 81, 45);
-		contentPane.add(united4);
-		united4.setLayout(null);
-		
-		JPanel porto4 = new JPanel();
-		porto4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		porto4.setBackground(Color.WHITE);
-		porto4.setBounds(756, 379, 81, 45);
-		contentPane.add(porto4);
-		porto4.setLayout(null);
-		
-		JPanel bayer4 = new JPanel();
-		bayer4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		bayer4.setBackground(Color.WHITE);
-		bayer4.setBounds(756, 558, 81, 45);
-		contentPane.add(bayer4);
-		bayer4.setLayout(null);
-		
-		JPanel paris4 = new JPanel();
-		paris4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		paris4.setBackground(Color.WHITE);
-		paris4.setBounds(756, 611, 81, 45);
-		contentPane.add(paris4);
-		paris4.setLayout(null);
-		
-		JPanel unitedsemi = new JPanel();
-		unitedsemi.setBorder(new LineBorder(new Color(0, 0, 0)));
-		unitedsemi.setBackground(Color.WHITE);
-		unitedsemi.setBounds(665, 417, 81, 45);
-		contentPane.add(unitedsemi);
-		unitedsemi.setLayout(null);
-		
-		JPanel parissemis = new JPanel();
-		parissemis.setBorder(new LineBorder(new Color(0, 0, 0)));
-		parissemis.setBackground(Color.WHITE);
-		parissemis.setBounds(665, 503, 81, 45);
-		contentPane.add(parissemis);
-		parissemis.setLayout(null);
-		
-		JPanel panel_9_1_3 = new JPanel();
-		panel_9_1_3.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_9_1_3.setBackground(Color.WHITE);
-		panel_9_1_3.setBounds(574, 460, 81, 45);
-		contentPane.add(panel_9_1_3);
-		panel_9_1_3.setLayout(null);
-		
-		JLabel trofeo = new JLabel("");
-		trofeo.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/23f1e2d191fc3913058f730feecb149b (2).png")));
-		trofeo.setBounds(374, 324, 193, 365);
-		contentPane.add(trofeo);
-		
-		JPanel Octavosp = new JPanel();
-		Octavosp.addMouseListener(new MouseAdapter() {
-		
-					});
-		Octavosp.setBackground(Color.BLACK);
-		Octavosp.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		Octavosp.setBounds(10, 753, 151, 37);
-		contentPane.add(Octavosp);
-		Octavosp.setLayout(null);
-		
-		JLabel Octavos = new JLabel("  Octavos");
-		Octavos.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				Octavos.setForeground(Color.BLACK);
-				Octavosp.setBackground(Color.WHITE);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				Octavos.setForeground(Color.WHITE);
-				Octavosp.setBackground(Color.BLACK);
-			}
+		JLabel lblNewLabel_5 = new JLabel("R E G R E S A R");
+		lblNewLabel_5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				jugadorp.setLocation(101, 324);
-				juventosp.setLocation(101, 611);
-				dortmundp.setLocation(101, 558);
-				real.setLocation(101, 379);
-				unitedp.setLocation(756, 324);
-				portop.setLocation(756, 379);
-				bayerp.setLocation(756, 558);
-				parisp.setLocation(756, 611);
-			}
-		});
-		Octavos.setBackground(Color.LIGHT_GRAY);
-		Octavos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		Octavos.setForeground(new Color(255, 255, 255));
-		Octavos.setFont(new Font("Rockwell Extra Bold", Font.BOLD, 15));
-		Octavos.setHorizontalAlignment(SwingConstants.CENTER);
-		Octavos.setBounds(0, 0, 151, 35);
-		Octavosp.add(Octavos);
-		
-		JLabel octavos = new JLabel("");
-		octavos.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/Asunto (1).png")));
-		octavos.setForeground(new Color(0, 0, 0));
-		octavos.setBounds(101, 0, 50, 35);
-		Octavosp.add(octavos);
-		octavos.setHorizontalAlignment(SwingConstants.RIGHT);
-		octavos.setFont(new Font("Bernard MT Condensed", Font.BOLD, 15));
-		
-
-		
-		JPanel cuartosp = new JPanel();
-		cuartosp.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				jugadorp.setLocation(192, 417);
-				juventosp.setLocation(192, 503);
-				unitedp.setLocation(665, 417);
-				parisp.setLocation(665, 503);
-			}
-		});
-		cuartosp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		cuartosp.setBackground(Color.BLACK);
-		cuartosp.setBounds(99, 678, 151, 37);
-		contentPane.add(cuartosp);
-		cuartosp.setLayout(null);
-		
-		JLabel cuartos = new JLabel("Cuartos");
-		cuartos.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				cuartos.setForeground(Color.black);
-				cuartosp.setBackground(Color.WHITE);
+				if(estado) {
+				}else {
+					Izq(panel_desliza,1,2,0);
+					estado=true;
+				}
 				
 			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				cuartos.setForeground(Color.WHITE);
-				cuartosp.setBackground(Color.BLACK);
-			}
 		});
-		cuartos.setForeground(new Color(255, 255, 255));
-		cuartos.setHorizontalAlignment(SwingConstants.CENTER);
-		cuartos.setFont(new Font("Rockwell Extra Bold", Font.BOLD, 15));
-		cuartos.setBounds(0, 0, 151, 37);
-		cuartosp.add(cuartos);
+		lblNewLabel_5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblNewLabel_5.setFont(new Font("Agency FB", Font.BOLD, 15));
+		lblNewLabel_5.setForeground(Color.WHITE);
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_5.setBounds(0, 0, 187, 32);
+		panel_10.add(lblNewLabel_5);
+		
+		JLabel contrincante = new JLabel("");
+		contrincante.setBounds(749, 299, 179, 345);
+		panel_desliza.add(contrincante);
+		
+		JLabel equipojugador = new JLabel("New label");
+		equipojugador.setBounds(10, 299, 179, 345);
+		panel_desliza.add(equipojugador);
+		
+		JLabel lblNewLabel_6 = new JLabel("");
+		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_6.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/kisspng-football-pitch-basketball-court-5aff844d52a688.6557021215266949893386.png")));
+		lblNewLabel_6.setBounds(10, 213, 918, 514);
+		panel_desliza.add(lblNewLabel_6);
+		
+		JPanel panel_9 = new JPanel();
+		panel_9.setBackground(Color.WHITE);
+		panel_9.setBounds(830, 11, 54, 49);
+		panel_desliza.add(panel_9);
+		
+		JLabel marcarival = new JLabel("");
+		marcarival.setHorizontalAlignment(SwingConstants.CENTER);
+		marcarival.setFont(new Font("Agency FB", Font.BOLD, 40));
+		marcarival.setBounds(741, 11, 187, 49);
+		panel_desliza.add(marcarival);
+		
+		JPanel panel_8 = new JPanel();
+		panel_8.setBackground(Color.WHITE);
+		panel_8.setBounds(101, 11, 96, 49);
+		panel_desliza.add(panel_8);
+		
+		
+		marcajugador.setFont(new Font("Agency FB", Font.BOLD, 40));
+		marcajugador.setHorizontalAlignment(SwingConstants.CENTER);
+		marcajugador.setBounds(10, 11, 187, 49);
+		panel_desliza.add(marcajugador);
+		
+		JPanel panel_7 = new JPanel();
+		panel_7.setBackground(Color.BLACK);
+		panel_7.setBounds(10, 71, 918, 48);
+		panel_desliza.add(panel_7);
+		
+		JLabel lblNewLabel_4 = new JLabel("M A R C A D O R");
+		lblNewLabel_4.setForeground(Color.WHITE);
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_4.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblNewLabel_4.setBounds(10, 11, 918, 49);
+		panel_desliza.add(lblNewLabel_4);
+		
+		JLabel label = new JLabel("");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/bur2v1uqdhn4vrp0369vcnn2a5.png")));
+		label.setBounds(0, 0, 938, 760);
+		panel_desliza.add(label);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(null);
+		panel_2.setBackground(Color.BLACK);
+		panel_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				if(numEntero<=resultado2 || numEntero<=resultado3 || numEntero<=resultado4 || numEntero<=resultado5 || numEntero<=resultado6 || numEntero<=resultado7 || numEntero<=resultado8 )
+				semi1.setText("S E M I   F I N A L");
+				semi2.setText("S E M I   F I N A L");
+				semi3.setText("S E M I   F I N A L");
+				semi4.setText("S E M I   F I N A L");
+				final1.setText("F I N A L");
+				final2.setText("F I N A L");
+				semi1.setIcon(null);
+				semi2.setIcon(null);
+				semi3.setIcon(null);
+				semi4.setIcon(null);
+				final1.setIcon(null);
+				
+				
+			}
+			
+			
+		});
+		panel_2.setPreferredSize(new Dimension(10, 40));
+		panel.add(panel_2, BorderLayout.SOUTH);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(Color.WHITE);
+		panel.add(panel_3, BorderLayout.CENTER);
+		panel_3.setLayout(null);
+		
+		JPanel panel_6 = new JPanel();
+		panel_6.setBackground(Color.BLACK);
+		panel_6.setBounds(163, 429, 767, 10);
+		panel_3.add(panel_6);
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
+		panel_4.setBackground(new Color(102, 255, 204));
+		panel_4.setBounds(456, 27, 406, 90);
+		panel_3.add(panel_4);
+		panel_4.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Champions League");
+		lblNewLabel.setFont(new Font("Agency FB", Font.BOLD, 40));
+		lblNewLabel.setForeground(new Color(0, 0, 0));
+		lblNewLabel.setBounds(10, 11, 386, 55);
+		panel_4.add(lblNewLabel);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBackground(new Color(0, 0, 0));
+		separator.setForeground(new Color(0, 0, 0));
+		separator.setBounds(10, 77, 386, 13);
+		panel_4.add(separator);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, Color.WHITE, Color.WHITE, null));
+		panel_1.setBackground(Color.BLACK);
+		panel_1.setBounds(668, 11, 270, 123);
+		panel_3.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
+		panel_5.setBackground(new Color(0, 0, 0));
+		panel_5.setBounds(0, 0, 153, 760);
+		panel_3.add(panel_5);
+		panel_5.setLayout(null);
+		
+		JLabel btnjugar = new JLabel("");
+		btnjugar.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/Proyecto nuevo (52).png")));
+		btnjugar.setBounds(0, 0, 153, 760);
+		panel_5.add(btnjugar);
+		
+		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/champions22.png")));
+		lblNewLabel_2.setBounds(0, 0, 140, 760);
+		panel_5.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/Asunto (1).png")));
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_3.setBounds(96, 0, 55, 37);
-		cuartosp.add(lblNewLabel_3);
+		lblNewLabel_3.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/bur2v1uqdhn4vrp0369vcnn2a53333.png")));
+		lblNewLabel_3.setBounds(0, 0, 153, 294);
+		panel_5.add(lblNewLabel_3);
 		
-		JPanel semisp = new JPanel();
-		semisp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		semisp.setBackground(Color.BLACK);
-		semisp.setBounds(192, 593, 151, 37);
-		contentPane.add(semisp);
-		semisp.setLayout(null);
-		
-		JLabel semis = new JLabel("  Semifinal");
-		semis.addMouseListener(new MouseAdapter() {
+		JLabel txtjugador = new JLabel("");
+		txtjugador.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				semisp.setBackground(Color.WHITE);
-				semis.setForeground(Color.BLACK);
+			public void mouseClicked(MouseEvent e) {
+				contrincante.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/3 (1).png")));
+				
+				if(estado) {
+					Der(panel_desliza,1,2,938);
+					estado=false;
+				}
+				resultado1=Binomial(jugador,10);
+				resultado2=Binomial(barcelona,10);
+				resultado3=Binomial(real_madrid,10);
+				resultado4=Binomial(mancherter_city,10);
+				resultado5=Binomial(paris,10);
+				resultado6=Binomial(bayer,10);
+				resultado7=Binomial(chelsea,10);
+				resultado8=Binomial(liverpool,10);
+				 numEntero = resultado1;
+				
+				 numEntero2 = resultado2;
+				
+				
+				if(resultado1==1 || resultado2==1) {
+					numEntero = resultado1+1;
+					numEntero2 = resultado2+1;
+					String numCadena = String.valueOf(numEntero);
+					marcajugador.setText(numCadena);
+					String numCadena2 = String.valueOf(numEntero2);
+					marcarival.setText(numCadena2);
+				}else {
+					String numCadena = String.valueOf(numEntero);
+					marcajugador.setText(numCadena);
+					String numCadena2 = String.valueOf(numEntero2);
+					marcarival.setText(numCadena2);	
+					
+					
+					if(estado) {
+						Der(panel_desliza,1,2,938);
+						estado=false;
+					}
+				//semifinal 1
+				}
+				if(resultado1>resultado2) {
+					semi1.setText("");
+					semi1.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/1 (1).png")));
+					resultado_semi=resultado1;
+					
+				}else {
+					semi1.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/3 (1).png")));
+					resultado_semi=resultado1;
+				}
+				//semifinal 2
+				if(resultado3>resultado4) {
+					semi2.setText("");
+					semi2.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/1 (1).png")));
+					
+				}else {
+					semi2.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/2 (1).png")));
+				}
+				//semifinal 3 
+				if(resultado5>resultado6) {
+					semi3.setText("");
+					semi3.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/4 (1).png")));
+					resultado_semi3=resultado5;
+					System.out.println(resultado_semi3);
+					
+				}else {
+					semi3.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/5 (1).png")));
+					resultado_semi4=resultado6;
+					System.out.println(resultado_semi4);
+				}
+				//semifinal 4
+				if(resultado7>resultado8) {
+					semi4.setText("");
+					semi4.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/623.png")));
+					resultado_semi5=resultado7;
+					System.out.println(resultado_semi5);
+					
+				}else {
+					semi4.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/7 (1).png")));
+					resultado_semi6=resultado8;
+					System.out.println(resultado_semi6);
+				}
+				
+		
+			
+				
 				
 			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				semisp.setBackground(Color.BLACK);
-				semis.setForeground(Color.WHITE);
-			}
 		});
-		semis.setForeground(new Color(255, 255, 255));
-		semis.setHorizontalAlignment(SwingConstants.CENTER);
-		semis.setFont(new Font("Rockwell Extra Bold", Font.BOLD, 13));
-		semis.setBounds(0, 0, 151, 37);
-		semisp.add(semis);
+		txtjugador.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		txtjugador.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/1 (1).png")));
+		txtjugador.setBorder(null);
+		txtjugador.setBounds(163, 140, 124, 124);
+		panel_3.add(txtjugador);
 		
-		JLabel lblNewLabel_5 = new JLabel("");
-		lblNewLabel_5.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/Asunto (1).png")));
-		lblNewLabel_5.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_5.setBounds(96, 0, 55, 37);
-		semisp.add(lblNewLabel_5);
+		JLabel txtbarcelona = new JLabel("");
+		txtbarcelona.setHorizontalAlignment(SwingConstants.CENTER);
+		txtbarcelona.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/3 (1).png")));
+		txtbarcelona.setBorder(null);
+		txtbarcelona.setBounds(297, 140, 124, 124);
+		panel_3.add(txtbarcelona);
 		
-		JPanel final1p = new JPanel();
-		final1p.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		final1p.setBackground(Color.BLACK);
-		final1p.setBounds(374, 697, 193, 37);
-		contentPane.add(final1p);
-		final1p.setLayout(null);
+		JLabel lblNewLabel_4_2 = new JLabel("");
+		lblNewLabel_4_2.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel_4_2.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/2 (1).png")));
+		lblNewLabel_4_2.setBorder(null);
+		lblNewLabel_4_2.setBounds(804, 145, 124, 124);
+		panel_3.add(lblNewLabel_4_2);
 		
-		JLabel final1 = new JLabel("Final");
-		final1.addMouseListener(new MouseAdapter() {
+		JLabel txtrealmadrid = new JLabel("");
+		txtrealmadrid.setHorizontalAlignment(SwingConstants.LEFT);
+		txtrealmadrid.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/1 (1).png")));
+		txtrealmadrid.setBorder(null);
+		txtrealmadrid.setBounds(670, 145, 124, 124);
+		panel_3.add(txtrealmadrid);
+		semi1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		semi1.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				final1.setForeground(Color.BLACK);
-				final1p.setBackground(Color.WHITE);
+			public void mouseClicked(MouseEvent e) {
+				resultado1=Binomial(jugador,10);
+				resultado2=Binomial(barcelona,10);
+				resultado3=Binomial(real_madrid,10);
+				resultado4=Binomial(mancherter_city,10);
+				resultado5=Binomial(paris,10);
+				resultado6=Binomial(bayer,10);
+				resultado7=Binomial(chelsea,10);
+				resultado8=Binomial(liverpool,10);
+				
+				
+				
+				
+			if(resultado_semi>resultado2 || resultado_semi>resultado3 || resultado_semi>resultado4) {
+				if(estado) {
+					Der(panel_desliza,1,2,938);
+					estado=false;
+				}
+				
+				if(resultado3>resultado4) {
+					if(resultado1>resultado3) {
+						final1.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/1 (1).png")));
+						
+						if(resultado1==1 || resultado3==1) {
+							numEntero = resultado1+1;
+							numEntero2 = resultado3+1;
+							String numCadena = String.valueOf(numEntero);
+							marcajugador.setText(numCadena);
+							String numCadena2 = String.valueOf(numEntero2);
+							marcarival.setText(numCadena2);
+							
+						}else {
+							String numCadena = String.valueOf(numEntero);
+							marcajugador.setText(numCadena);
+							String numCadena2 = String.valueOf(numEntero2);
+							marcarival.setText(numCadena2);	
+							
+						}
+						contrincante.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/1 (1).png")));
+							
+						
+					}else {
+						final1.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/1 (1).png")));
+						if(resultado1==1 || resultado4==1) {
+							numEntero = resultado1+1;
+							numEntero2 = resultado4+1;
+							String numCadena = String.valueOf(numEntero);
+							marcajugador.setText(numCadena);
+							String numCadena2 = String.valueOf(numEntero2);
+							marcarival.setText(numCadena2);
+						}else {
+							String numCadena = String.valueOf(numEntero);
+							marcajugador.setText(numCadena);
+							String numCadena2 = String.valueOf(numEntero2);
+							marcarival.setText(numCadena2);	
+							
+						}
+						contrincante.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/1 (1).png")));
+						
+						
+					}
+				}else {
+					if(resultado1>resultado4) {
+						final1.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/1 (1).png")));
+						if(resultado1==1 || resultado4==1) {
+							numEntero = resultado1+1;
+							numEntero2 = resultado4+1;
+							String numCadena = String.valueOf(numEntero);
+							marcajugador.setText(numCadena);
+							String numCadena2 = String.valueOf(numEntero2);
+							marcarival.setText(numCadena2);
+						}else {
+							String numCadena = String.valueOf(numEntero);
+							marcajugador.setText(numCadena);
+							String numCadena2 = String.valueOf(numEntero2);
+							marcarival.setText(numCadena2);		
+						}
+						contrincante.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/2 (1).png")));
+					}else {
+						final1.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/2 (1).png")));
+						if(resultado1==1 || resultado4==1) {
+							numEntero = resultado1+1;
+							numEntero2 = resultado4+1;
+							String numCadena = String.valueOf(numEntero);
+							marcajugador.setText(numCadena);
+							String numCadena2 = String.valueOf(numEntero2);
+							marcarival.setText(numCadena2);
+						}else {
+							String numCadena = String.valueOf(numEntero);
+							marcajugador.setText(numCadena);
+							String numCadena2 = String.valueOf(numEntero2);
+							marcarival.setText(numCadena2);		
+						}
+						contrincante.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/2 (1).png")));
+					}
+					
+					
+				}
+			
+				if(resultado_semi3>resultado_semi4 && resultado_semi5>resultado_semi6 ) {
+					if(resultado5>resultado7) {
+						final2.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/4 (1).png")));
+					}else {
+						final2.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/623.png")));
+					}
+				}else {
+					if(resultado6>resultado8) {
+						final2.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/5 (1).png")));
+					}else {
+						final2.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/7 (1).png")));
+					}
+				}
+
+			}else {
+				JOptionPane.showMessageDialog(null, "Error, reinicia el partido de nuevo");
 			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				final1.setForeground(Color.WHITE);
-				final1p.setBackground(Color.BLACK);
+				
 			}
+			
+		
+
 		});
-		final1.setForeground(new Color(255, 255, 255));
-		final1.setFont(new Font("Rockwell Extra Bold", Font.BOLD, 20));
+		
+		
+		semi1.setHorizontalAlignment(SwingConstants.CENTER);
+		semi1.setFont(new Font("Agency FB", Font.BOLD, 20));
+		semi1.setBorder(null);
+		semi1.setBounds(213, 275, 153, 124);
+		panel_3.add(semi1);
+		
+		
+		semi2.setHorizontalAlignment(SwingConstants.CENTER);
+		semi2.setFont(new Font("Agency FB", Font.BOLD, 20));
+		semi2.setBorder(null);
+		semi2.setBounds(725, 275, 147, 124);
+		panel_3.add(semi2);
+		final1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		
+		final1.setFont(new Font("Agency FB", Font.BOLD, 20));
 		final1.setHorizontalAlignment(SwingConstants.CENTER);
-		final1.setBounds(0, 0, 193, 37);
-		final1p.add(final1);
+		final1.setBorder(null);
+		final1.setBounds(467, 294, 153, 124);
+		panel_3.add(final1);
 		
-		JLabel lblNewLabel_7 = new JLabel("");
-		lblNewLabel_7.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/Asunto (1).png")));
-		lblNewLabel_7.setBounds(143, 0, 50, 37);
-		final1p.add(lblNewLabel_7);
+		JLabel lblNewLabel_4_1_4 = new JLabel("");
+		lblNewLabel_4_1_4.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/4 (1).png")));
+		lblNewLabel_4_1_4.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_4_1_4.setBorder(null);
+		lblNewLabel_4_1_4.setBounds(163, 625, 124, 124);
+		panel_3.add(lblNewLabel_4_1_4);
 		
-		JLabel lblNewLabel_8 = new JLabel("");
-		lblNewLabel_8.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/champions22.png")));
-		lblNewLabel_8.setBounds(319, 0, 619, 800);
-		contentPane.add(lblNewLabel_8);
+		JLabel lblNewLabel_4_1_5 = new JLabel("");
+		lblNewLabel_4_1_5.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/5 (1).png")));
+		lblNewLabel_4_1_5.setBorder(null);
+		lblNewLabel_4_1_5.setBounds(297, 625, 124, 124);
+		panel_3.add(lblNewLabel_4_1_5);
+		
+		
+		semi3.setHorizontalAlignment(SwingConstants.CENTER);
+		semi3.setFont(new Font("Agency FB", Font.BOLD, 20));
+		semi3.setBorder(null);
+		semi3.setBounds(213, 490, 153, 124);
+		panel_3.add(semi3);
+		
+		JLabel lblNewLabel_4_1_7 = new JLabel("");
+		lblNewLabel_4_1_7.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/7 (1).png")));
+		lblNewLabel_4_1_7.setBorder(null);
+		lblNewLabel_4_1_7.setBounds(804, 625, 124, 124);
+		panel_3.add(lblNewLabel_4_1_7);
+		
+		JLabel lblNewLabel_4_1_8 = new JLabel("");
+		lblNewLabel_4_1_8.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/623.png")));
+		lblNewLabel_4_1_8.setBorder(null);
+		lblNewLabel_4_1_8.setBounds(668, 625, 124, 124);
+		panel_3.add(lblNewLabel_4_1_8);
+		
+		
+		semi4.setHorizontalAlignment(SwingConstants.CENTER);
+		semi4.setFont(new Font("Agency FB", Font.BOLD, 20));
+		semi4.setBorder(null);
+		semi4.setBounds(725, 490, 147, 124);
+		panel_3.add(semi4);
+		
+		
+		final2.setFont(new Font("Agency FB", Font.BOLD, 20));
+		final2.setHorizontalAlignment(SwingConstants.CENTER);
+		final2.setBorder(null);
+		final2.setBounds(456, 450, 164, 124);
+		panel_3.add(final2);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(Torneo.class.getResource("/imagenes/bur2v1uqdhn4vrp0369vcnn2a5.png")));
+		lblNewLabel_1.setBounds(368, 0, 570, 760);
+		panel_3.add(lblNewLabel_1);
 	}
 }
+	

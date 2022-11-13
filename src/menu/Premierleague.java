@@ -28,7 +28,7 @@ import javax.swing.JSeparator;
 					/*if(estado) {
 						Der(panel_desliza,1,2,938);
 						estado=false;
-						
+						}
 						
 						
 				if(estado) {
@@ -235,7 +235,7 @@ public class Premierleague extends JFrame {
 		
 		JLabel lblNewLabel_9 = new JLabel("");
 		lblNewLabel_9.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_9.setIcon(new ImageIcon(Premierleague.class.getResource("/imagenes/Chelsea_FC.svg.png")));
+		lblNewLabel_9.setIcon(new ImageIcon(Premierleague.class.getResource("/imagenes/real_ligas (1).png")));
 		lblNewLabel_9.setBounds(0, 59, 187, 190);
 		panel_1.add(lblNewLabel_9);
 		
@@ -358,12 +358,6 @@ public class Premierleague extends JFrame {
 					estado=false;
 				}
 				jugarpartidos();
-				if(numEntero>numEntero2) {
-					victoria=true;
-				}
-				else {
-					victoria=false;
-				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -457,7 +451,7 @@ public class Premierleague extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				contrincante.setIcon(new ImageIcon(Premierleague.class.getResource("/imagenes/Chelsea_FC.svg.png")));
 				if(numEntero>numEntero2 && numEntero!=numEntero2) {
-					victoria=true;
+					
 					jugarpartidos();
 					if(estado) {
 						Der(panel_desliza,1,2,938);
@@ -466,7 +460,7 @@ public class Premierleague extends JFrame {
 					
 				}
 				else {
-					victoria=false;
+					
 					JOptionPane.showMessageDialog(null, "Error, reinicia el partido de nuevo");
 				}
 				

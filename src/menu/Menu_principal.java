@@ -22,6 +22,10 @@ import java.awt.Cursor;
 import java.awt.SystemColor;
 import javax.swing.border.SoftBevelBorder;
 
+import Ftienda.contr;
+import has_jugadores_equipos.modelo;
+import mvc.modelo_equipo;
+import mvc.modelo_usuario;
 import mvc_jugadores.consulta;
 import mvc_jugadores.controlador;
 import mvc_jugadores.jugador_modelo;
@@ -48,9 +52,7 @@ public class Menu_principal extends JFrame {
 	JLabel txtpar = new JLabel(" Super Ligas");
 	JPanel btntor = new JPanel();
 	JPanel btntien = new JPanel();
-	JPanel btnesta = new JPanel();
 	JPanel btncerrarm = new JPanel();
-	JLabel txtesta = new JLabel("  Estadisticas");
 	JLabel txtcerrarm = new JLabel("X");
 	JLabel txttor = new JLabel("  Torneo principal");
 	JLabel txttien = new JLabel("  Tienda");
@@ -58,88 +60,21 @@ public class Menu_principal extends JFrame {
 	
 	private boolean color=true;
 	private boolean color2=true;
+	private modelo_usuario mod;
+	private modelo_equipo modE;
+
 	
-	private void cambiarcolor() {
-		
-		if(color) {
-		panel_1.setBackground(new Color(0,0,51));
-		marke.setBackground(new Color(0,0,102));
-		btnequipo.setBackground(new Color(0,0,102));
-		btnpar.setBackground(new Color(0,0,102));
-		btntor.setBackground(new Color(0,0,102));
-		btntien.setBackground(new Color(0,0,102));
-		btnesta.setBackground(new Color(0,0,102));
-		btncerrarm.setBackground(new Color(0,0,102));
-		
-		color=false;
-		color2=false;
-		
-		
-		}else {
-			panel_1.setBackground(Color.BLACK);
-			marke.setBackground(Color.LIGHT_GRAY);
-			btnequipo.setBackground(Color.LIGHT_GRAY);
-			btnpar.setBackground(Color.LIGHT_GRAY);
-			btntor.setBackground(Color.LIGHT_GRAY);
-			btntien.setBackground(Color.LIGHT_GRAY);
-			btnesta.setBackground(Color.LIGHT_GRAY);
-			btncerrarm.setBackground(Color.BLACK);
-			
-			color=false;
-		}
-		
-	}
-	private void cambiarcolor2() {
-		if(color2=true) {
-				
-			marke.setBackground(new Color(153,102,204));	
-			btnequipo.setBackground(new Color(153,102,204));	
-			btnpar.setBackground(new Color(153,102,204));	
-			btntor.setBackground(new Color(153,102,204));	
-			btntien.setBackground(new Color(153,102,204));	
-			btnesta.setBackground(new Color(153,102,204));	
-			btncerrarm.setBackground(new Color(153,102,204));	
-			
-			color2=true;
-		}else if(color2=false) {
-			marke.setBackground(Color.WHITE);
-			btnequipo.setBackground(Color.WHITE);
-			btnpar.setBackground(Color.WHITE);
-			btntor.setBackground(Color.WHITE);
-			btntien.setBackground(Color.WHITE);
-			btnesta.setBackground(Color.WHITE);
-			btncerrarm.setBackground(Color.WHITE);
-			
-			marketing2.setForeground(Color.black);
-			txtequipo.setForeground(Color.black);
-			txtpar.setForeground(Color.black);
-			txttor.setForeground(Color.BLACK);
-			txttien.setForeground(Color.BLACK);
-			txtesta.setForeground(Color.BLACK);
-			
-			
-			
-		}
-		
-	}
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Menu_principal frame = new Menu_principal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.
+	 * @param mod 
 	 */
-	public Menu_principal() {
-		componentes();
+	public Menu_principal(modelo_usuario mod) {
+		componentes(mod);
+		
+		//modH.setIdS(mod.getId());
+		
 	}
 	public void cerrarventanas() {
 		ventana.dispose();
@@ -150,7 +85,7 @@ public class Menu_principal extends JFrame {
 		mercado.dispose();
 	}
 	
-	public void componentes() {
+	public void componentes(modelo_usuario mod2) {
 		setLocationByPlatform(true);
 		setUndecorated(true);
 		setResizable(false);
@@ -184,6 +119,7 @@ public class Menu_principal extends JFrame {
 		
 		
 		marketing2.addMouseListener(new MouseAdapter() {
+			private modelo_usuario mod;
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				marke.setBackground(Color.WHITE);
@@ -193,18 +129,19 @@ public class Menu_principal extends JFrame {
 			@Override
 			public void mouseExited(MouseEvent e) {
 
-				consulta modC = new consulta();
-				jugador_modelo mod = new jugador_modelo();
-				controlador ctr = new controlador(mod,modC,mercado);
-				ctr.iniciar();
-				mercado.setLocation(462, 30);
-				mercado.setVisible(true);
-				
+				marke.setBackground(Color.LIGHT_GRAY);
+				marketing2.setForeground(Color.WHITE);
 			}			
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				cerrarventanas();
-				mercado.setLocation(461, 30);
+				Marketing mercado = new Marketing(mod2);
+				modelo modH= new modelo();
+				consulta modC = new consulta();
+				jugador_modelo mod = new jugador_modelo();
+				controlador ctr = new controlador(mod,modC,mercado,mod2, modH);
+				ctr.iniciar();
+				mercado.setLocation(462, 30);
 				mercado.setVisible(true);
 			}
 		});
@@ -231,6 +168,7 @@ public class Menu_principal extends JFrame {
 		
 		txtequipo.setIcon(new ImageIcon(Menu_principal.class.getResource("/imagenes/jugador (1).png")));
 		txtequipo.addMouseListener(new MouseAdapter() {
+			private modelo_usuario mod;
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnequipo.setBackground(Color.WHITE);
@@ -243,9 +181,9 @@ public class Menu_principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
 				cerrarventanas();
-				ventana.setLocation(461, 100);
+				Equipo ventana = new Equipo();
+				ventana.setLocation(461, 30);
 				ventana.setVisible(true);	
 			}
 			
@@ -269,6 +207,7 @@ public class Menu_principal extends JFrame {
 		
 		txtpar.setIcon(new ImageIcon(Menu_principal.class.getResource("/imagenes/balon (1).png")));
 		txtpar.addMouseListener(new MouseAdapter() {
+			private modelo_usuario mod;
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnpar.setBackground(Color.WHITE);
@@ -283,8 +222,8 @@ public class Menu_principal extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				
 				cerrarventanas();
+				superligas partidos = new superligas();
 				partidos.setVisible(true);
 				partidos.setLocation(461, 30);
 			}
@@ -307,6 +246,7 @@ public class Menu_principal extends JFrame {
 		txttor.setBounds(0, 0, 361, 64);
 		btntor.add(txttor);
 		txttor.addMouseListener(new MouseAdapter() {
+			private modelo_usuario mod;
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btntor.setBackground(Color.WHITE);
@@ -320,8 +260,8 @@ public class Menu_principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
 				cerrarventanas();
+				Torneo torneo = new Torneo();
 				torneo.setLocation(461, 30);
 				torneo.setVisible(true);
 				
@@ -345,6 +285,7 @@ public class Menu_principal extends JFrame {
 		txttien.setBounds(0, 0, 361, 64);
 		btntien.add(txttien);
 		txttien.addMouseListener(new MouseAdapter() {
+			private modelo_usuario mod;
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btntien.setBackground(Color.WHITE);
@@ -360,6 +301,12 @@ public class Menu_principal extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				cerrarventanas();
+				Tienda tienda = new Tienda(mod2);
+				modelo modH= new modelo();
+				consulta modC = new consulta();
+				jugador_modelo mod = new jugador_modelo();
+				contr ctr = new contr(mod,modC,tienda,mod2, modH);
+				ctr.iniciar();
 				tienda.setLocation(461, 30);
 				tienda.setVisible(true);	
 			}
@@ -400,43 +347,6 @@ public class Menu_principal extends JFrame {
 		txtcerrarm.setHorizontalAlignment(SwingConstants.CENTER);
 		txtcerrarm.setBounds(0, 0, 53, 45);
 		btncerrarm.add(txtcerrarm);
-		
-		
-		btnesta.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		btnesta.setBackground(Color.LIGHT_GRAY);
-		btnesta.setBounds(0, 621, 361, 64);
-		panel_1.add(btnesta);
-		btnesta.setLayout(null);
-		
-		
-		txtesta.setBounds(0, 0, 361, 64);
-		btnesta.add(txtesta);
-		txtesta.setIcon(new ImageIcon(Menu_principal.class.getResource("/imagenes/69517.png")));
-		txtesta.setBackground(Color.WHITE);
-		txtesta.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnesta.setBackground(Color.WHITE);
-				txtesta.setForeground(Color.black);
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnesta.setBackground(Color.LIGHT_GRAY);
-				txtesta.setForeground(Color.WHITE);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				cerrarventanas();
-				estadistica.setLocation(461, 100);
-				estadistica.setVisible(true);	
-			}
-		});
-		txtesta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		txtesta.setHorizontalAlignment(SwingConstants.CENTER);
-		txtesta.setForeground(Color.WHITE);
-		txtesta.setFont(new Font("Roboto Mono Medium", Font.BOLD, 25));
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 170, 341, 18);
